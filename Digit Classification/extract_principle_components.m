@@ -8,9 +8,9 @@ shifted_images = training_set-repmat(mean_digits, 1,train_size);
 [eigen_vectors, score, eigen_values] = princomp(training_set');
 %% return the top eigenvectors i.e. principle components
 eigen_vectors = eigen_vectors(:,1:p_components);
-% save train_eigen_vect_25 eigen_vectors;
-% save train_shifted_img_25 shifted_images;
-% save train_mean_25 mean_digits;
+ save train_eigen_vect_25 eigen_vectors;
+ save train_shifted_img_25 shifted_images;
+ save train_mean_25 mean_digits;
 %% project images into subspace to generate feature vectors
 train_features = eigen_vectors'*shifted_images;
 pca_train = train_features;
@@ -27,5 +27,5 @@ normplot(pca_train(:))
 [U,S,V] = svd(training_set);
 diag_res  = diag(S);
 var_res = sum(diag_res(1:p_components))/sum(diag_res);
-fprintf('Variance : ', var_res);
+fprintf('Variance : %d', var_res);
 end
