@@ -6,28 +6,14 @@ clc;
 com = 5;
 for k=1:3
 loading_images;
-train_out=training_set'; % save original data
-test_out=testing_set';
-mn = mean(train_out);
-train_out = bsxfun(@minus,train_out,mn); % substract mean
-test_out = bsxfun(@minus,test_out,mn);
-[coefs,scores,variances] = princomp(train_out );
-pervar = cumsum(variances) / sum(variances);
-dims = 15;
-pca_train = train_out*coefs(:,1:dims); % dims - keep this many dimensions
-pca_test = test_out*coefs(:,1:dims); % result is in train_out and test_out
-% X = bsxfun(@minus, training_set', mean(training_set',1));           
-% covariancex = (X'*X)./(size(X,1)-1);                 
-% 
-% [V D] = eigs(covariancex, 25);   % reduce to 10 dimension
-% 
-% Xtest = bsxfun(@minus, testing_set', mean(training_set',1));  
-% pcatest = Xtest*V;
-% pca_train = V;
-% pca_test = pcatest;
+training_set = bsxfun(@minus,training_set;,mean(train_out)); 
+testing_set = bsxfun(@minus,testing_set;,mean(train_out));
+[coefs,scores,variances] = princomp(training_set );
+pca_train = training_set*coefs(:,1:15); 
+pca_test = testing_set*coefs(:,1:15);
 lambda = [0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.1, 0.2,0.3,0.4,0.5];
 for y=1:1
-[prin_comp cov_matrxi Theta_0 Theta_1 Theta_2 Theta_3 Theta_4 Theta_5 Theta_6 Theta_7 Theta_8 Theta_9 A W] = LearnGraphStructureLasso(pca_train, train_lbls, pca_test, test_labels,0.017);
+[prin_comp cov_matrxi Theta_0 Theta_1 Theta_2 Theta_3 Theta_4 Theta_5 Theta_6 Theta_7 Theta_8 Theta_9 A W] = LearnGraphStructureLasso(pca_train, train_lbls, pca_test, test_labels,lambda[y]);
 cur_res(y) = A;
 end
 
