@@ -3,7 +3,6 @@
 
 close all;
 addpath('Project/dataset/');
-%picGray = imread('database/mit/i281.jpg');
 folder_name=['dataset/','blue2/'];
 dest_folder = ['cropped_dataset/blue2/'];
 filePattern = fullfile(folder_name, '/*.*');
@@ -15,14 +14,12 @@ for k=1:35
         picGray=(imread([folder_name,num2str(k,'%d'),'.jpeg']));
 %        [ri,ci,di]=size(curr_slice);
 %picGray = imread('dataset/black0/1.jpeg');
-%picGray = imread('mit/i218.jpg');
 picGray = imresize(picGray, [250 250]);
 
 org = uint8(picGray);
 
 I1 = picGray;
    radius =21;
-    %decoy = I1;
    
    I1_ = fftshift(fft2(double(I1)));
    [m n z] = size(I1);
@@ -32,31 +29,13 @@ I1 = picGray;
       J_(:,:,colorI) = I1_(:,:,colorI).*(2-h)-I1_(:,:,colorI).*(h);
    end
    J = uint8(real(ifft2(ifftshift(J_))));
-%figure,imshow(J),title('FOURIER');
 
 
 picGray = J;
 
-
-%picGray = picGray-std2(picGray(:));
-
-%figure,imshow(org);
-%picGray = rgb2gray(picGray);
 IM = picGray;
-% IM = IM - min(IM(:)) ;
-% IM = IM / max(IM(:)) ;
-%picGray = IM;
-%  sigm = 5;
-%  picGray = imfilter(picGray, fspecial('gaussian',[round(4*sigm) round(4*sigm)],sigm));
-R = 2;
-L = 4*R + 1;    %% The length of the LGS structure
-W = 2*R + 1;    %% The width of the LGS structure
-Cx = 2*R + 1;   %% Target pixel
-Cy = R + 1;
-Input_Im = uint8(picGray);
-row_max = size(Input_Im,1)-W+1;
-col_max = size(Input_Im,2)-L+1;
-LGS_Im = zeros(row_max, col_max);
+
+
 
 winSize = ceil(26 * 17);
 params.eye.gaussian = fspecial('gaussian', [winSize winSize], 26);
@@ -65,13 +44,6 @@ winSize = ceil(26 * 17);
 params.out.gaussian = fspecial('gaussian', [winSize winSize], 17);
     map = imfilter(picGray, params.eye.gaussian, 0);
 
- %   figure,imshow(map);
-%figure,imshow(picGray),title('Map');
-
-
-
-%  figure; imshow(org); hold on;
-%     plot(regions, 'showPixelList', true, 'showEllipses', false);
 I = map;
 %%%%%%%%%%%%%%%EDGE DETECTION%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %     [~, threshold] = edge(I, 'canny');
